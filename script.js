@@ -6,15 +6,22 @@ const campoData = document.getElementById("data");
 const lista = document.getElementById("lista");
 const totalHoras = document.getElementById("total-horas");
 const mensagemVazia = document.getElementById("vazio");
-const areaGrafico = document.getElementById("area-grafico");
 const canvasGrafico = document.getElementById("grafico-tecnologias");
 
-const areaGraficoLinha = document.getElementById("area-grafico-linha");
 const canvasLinha = document.getElementById("grafico-dias");
+const cartaoMaisEstudada = document.getElementById("mais-estudada");
+const cartaoSequencia = document.getElementById("sequencia");
+const rotuloSequencia = document.getElementById("rotulo-sequencia");
 
 // Guardam os gráficos para podermos apagar e desenhar de novo
 let grafico = null;
 let graficoLinha = null;
+
+// Deixa os gráficos com a mesma fonte e cor de texto do resto da página
+if (typeof Chart !== "undefined") {
+  Chart.defaults.font.family = "'IBM Plex Sans', system-ui, sans-serif";
+  Chart.defaults.color = "#5b6b82";
+}
 
 // 2. Carregar os estudos salvos (se não tiver nada, começa com uma lista vazia)
 let estudos = JSON.parse(localStorage.getItem("estudos")) || [];
@@ -34,7 +41,62 @@ function remover(posicao) {
   mostrar();
 }
 
-// 6. Desenhar o gráfico de barras (horas por tecnologia)
+// 6. Cartões: tecnologia mais estudada e sequência de dias
+function tecnologiaMaisEstudada() {
+  // Soma as horas de cada tecnologia. Exemplo: { Python: 5, HTML: 2 }
+  const horasPorTecnologia = {};
+  estudos.forEach(function (estudo) {
+    const somaAtual = horasPorTecnologia[estudo.tecnologia] || 0;
+    horasPorTecnologia[estudo.tecnologia] = somaAtual + estudo.horas;
+  });
+
+  // Procura qual tem o maior total
+  let maisEstudada = "-";
+  let maiorTotal = 0;
+  for (const nome in horasPorTecnologia) {
+    if (horasPorTecnologia[nome] > maiorTotal) {
+      maiorTotal = horasPorTecnologia[nome];
+      maisEstudada = nome;
+    }
+  }
+  return maisEstudada;
+}
+
+function calcularSequencia() {
+  // Lista dos dias em que você estudou (sem repetir)
+  const diasComEstudo = [];
+  estudos.forEach(function (estudo) {
+    if (!diasComEstudo.includes(estudo.data)) {
+      diasComEstudo.push(estudo.data);
+    }
+  });
+
+  // Começa a contar por hoje
+  const dia = new Date();
+
+  // Se você ainda não estudou hoje, começa por ontem
+  if (!diasComEstudo.includes(dia.toLocaleDateString("en-CA"))) {
+    dia.setDate(dia.getDate() - 1);
+  }
+
+  // Volta um dia de cada vez, enquanto tiver estudo naquele dia
+  let dias = 0;
+  while (diasComEstudo.includes(dia.toLocaleDateString("en-CA"))) {
+    dias = dias + 1;
+    dia.setDate(dia.getDate() - 1);
+  }
+  return dias;
+}
+
+function mostrarCartoes() {
+  cartaoMaisEstudada.textContent = tecnologiaMaisEstudada();
+
+  const dias = calcularSequencia();
+  cartaoSequencia.textContent = dias;
+  rotuloSequencia.textContent = dias === 1 ? "dia seguido" : "dias seguidos";
+}
+
+// 7. Desenhar o gráfico de barras (horas por tecnologia)
 function mostrarGrafico() {
   // Se o Chart.js não carregou (sem internet), não faz nada
   if (typeof Chart === "undefined") {
@@ -70,7 +132,7 @@ function mostrarGrafico() {
   });
 }
 
-// 7. Desenhar o gráfico de linha (horas por dia)
+// 8. Desenhar o gráfico de linha (horas por dia)
 function mostrarGraficoLinha() {
   if (typeof Chart === "undefined") {
     return;
@@ -120,7 +182,7 @@ function mostrarGraficoLinha() {
   });
 }
 
-// 8. Desenhar a lista e o total na tela
+// 9. Desenhar a lista e o total na tela
 function mostrar() {
   lista.innerHTML = "";
   let total = 0;
@@ -151,14 +213,13 @@ function mostrar() {
   // Só mostra a mensagem "nenhum estudo" quando a lista está vazia
   mensagemVazia.hidden = estudos.length > 0;
 
-  // O gráfico só aparece quando existe pelo menos um estudo
-  areaGrafico.hidden = estudos.length === 0;
-  areaGraficoLinha.hidden = estudos.length === 0;
+  // Atualiza os gráficos e os cartões
   mostrarGrafico();
   mostrarGraficoLinha();
+  mostrarCartoes();
 }
 
-// 9. Quando clicar em "Registrar estudo"
+// 10. Quando clicar em "Registrar estudo"
 formulario.addEventListener("submit", function (evento) {
   evento.preventDefault(); // impede a página de recarregar
 
@@ -173,5 +234,5 @@ formulario.addEventListener("submit", function (evento) {
   mostrar();
 });
 
-// 10. Mostrar o que já estava salvo assim que a página abre
+// 11. Mostrar o que já estava salvo assim que a página abre
 mostrar();

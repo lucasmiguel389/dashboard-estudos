@@ -1,117 +1,287 @@
 /* Cores do projeto (fáceis de trocar depois) */
 :root {
-  --fundo: #eef2f5;
+  --fundo: #eaeff5;
   --cartao: #ffffff;
-  --texto: #1d2733;
+  --texto: #172033;
+  --texto-suave: #5b6b82;
+  --borda: #d9e1ec;
   --destaque: #2f6fed;
-  --borda: #d5dde5;
+  --destaque-escuro: #1f4fb8;
 }
 
 * {
   box-sizing: border-box;
 }
 
+/* Faz o atributo "hidden" sempre esconder o elemento */
+[hidden] {
+  display: none !important;
+}
+
 body {
   margin: 0;
-  font-family: system-ui, sans-serif;
+  font-family: "IBM Plex Sans", system-ui, sans-serif;
   background: var(--fundo);
   color: var(--texto);
 }
 
-main {
-  max-width: 560px;
+/* ---------- Estrutura da página (celular: tudo em uma coluna) ---------- */
+.pagina {
+  max-width: 1440px;
   margin: 0 auto;
-  padding: 24px 16px;
+  padding: 20px 16px;
+  display: grid;
+  gap: 16px;
 }
 
-.total {
-  background: var(--destaque);
-  color: white;
-  padding: 20px;
-  border-radius: 12px;
-  font-size: 1.1rem;
-  margin-bottom: 16px;
+.painel,
+.lateral,
+.principal {
+  display: grid;
+  gap: 16px;
 }
 
-#total-horas {
-  font-size: 2.4rem;
-  font-weight: 700;
+.topo h1 {
+  margin: 0;
+  font-size: 1.5rem;
 }
 
+.topo p {
+  margin: 4px 0 0;
+  color: var(--texto-suave);
+}
+
+h2 {
+  margin: 0 0 12px;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+/* Todos os blocos brancos */
+.cartao,
+.grafico,
+.historico,
 form {
   background: var(--cartao);
   border: 1px solid var(--borda);
   border-radius: 12px;
   padding: 16px;
+}
+
+/* ---------- Formulário ---------- */
+form {
   display: grid;
+  grid-template-columns: 1fr 1fr;
   gap: 12px;
+  align-content: start;
+}
+
+form h2,
+.campo-largo {
+  grid-column: 1 / -1;
+}
+
+form h2 {
+  margin: 0;
 }
 
 label {
   display: grid;
   gap: 4px;
-  font-weight: 600;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--texto-suave);
 }
 
-select, input {
-  padding: 8px;
-  font-size: 1rem;
+select,
+input {
+  width: 100%;
+  padding: 8px 10px;
+  font: inherit;
+  color: var(--texto);
+  background: #fff;
   border: 1px solid var(--borda);
   border-radius: 8px;
 }
 
-button {
+form button {
   padding: 10px;
-  font-size: 1rem;
+  font: inherit;
+  font-weight: 600;
+  color: #fff;
+  background: var(--destaque);
   border: none;
   border-radius: 8px;
-  background: var(--destaque);
-  color: white;
   cursor: pointer;
 }
 
-button:focus-visible, select:focus-visible, input:focus-visible {
-  outline: 3px solid var(--texto);
+form button:hover {
+  background: var(--destaque-escuro);
+}
+
+:focus-visible {
+  outline: 3px solid var(--destaque);
   outline-offset: 2px;
+}
+
+/* ---------- Histórico ---------- */
+#vazio {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--texto-suave);
 }
 
 ul {
   list-style: none;
+  margin: 0;
   padding: 0;
   display: grid;
-  gap: 8px;
+  gap: 6px;
+  align-content: start;
 }
 
 li {
-  background: var(--cartao);
-  border: 1px solid var(--borda);
-  border-radius: 8px;
-  padding: 10px 12px;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  font-size: 0.9rem;
+  border: 1px solid var(--borda);
+  border-radius: 8px;
 }
 
 li button {
-  padding: 4px 10px;
+  padding: 2px 8px;
+  font: inherit;
+  font-size: 0.8rem;
+  color: var(--texto-suave);
   background: transparent;
-  color: var(--texto);
   border: 1px solid var(--borda);
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+li button:hover {
+  color: #b3261e;
+  border-color: #b3261e;
+}
+
+/* ---------- Cartões de números ---------- */
+.cartoes {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 16px;
+}
+
+.cartao {
+  display: grid;
+  gap: 2px;
+  align-content: center;
+  color: var(--texto-suave);
+}
+
+.cartao-valor {
+  font-size: 1.75rem;
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--texto);
+}
+
+.cartao-total {
+  background: var(--destaque);
+  border-color: var(--destaque);
+  color: #fff;
+}
+
+.cartao-total .cartao-valor {
+  color: #fff;
+}
+
+/* ---------- Gráficos ---------- */
+.graficos {
+  display: grid;
+  gap: 16px;
 }
 
 .grafico {
-  background: var(--cartao);
-  border: 1px solid var(--borda);
-  border-radius: 12px;
-  padding: 16px;
-  margin-top: 16px;
-}
-
-.grafico h2 {
-  margin-top: 0;
+  display: flex;
+  flex-direction: column;
 }
 
 .caixa-grafico {
   position: relative;
-  height: 240px;
+  height: 260px;
+}
+
+/* ---------- Computador: duas colunas e gráficos lado a lado ---------- */
+@media (min-width: 1000px) {
+  .pagina {
+    padding: 20px 24px;
+  }
+
+  .painel {
+    grid-template-columns: 320px 1fr;
+    align-items: start;
+  }
+
+  .graficos {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .caixa-grafico {
+    height: 320px;
+  }
+}
+
+/* ---------- Computador com tela alta o suficiente: tudo cabe na tela, sem rolagem ---------- */
+@media (min-width: 1000px) and (min-height: 700px) {
+  .pagina {
+    height: 100vh;
+    grid-template-rows: auto minmax(0, 1fr);
+  }
+
+  .painel {
+    min-height: 0;
+    grid-template-rows: minmax(0, 1fr);
+    align-items: stretch;
+  }
+
+  .lateral {
+    min-height: 0;
+    grid-template-rows: auto minmax(0, 1fr);
+  }
+
+  .historico {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+  }
+
+  .historico ul {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+  }
+
+  .principal {
+    min-height: 0;
+    grid-template-rows: auto minmax(0, 1fr);
+  }
+
+  .graficos {
+    min-height: 0;
+    grid-template-rows: minmax(0, 1fr);
+  }
+
+  .grafico {
+    min-height: 0;
+  }
+
+  .caixa-grafico {
+    flex: 1;
+    height: auto;
+    min-height: 0;
+    overflow: hidden;
+  }
 }
