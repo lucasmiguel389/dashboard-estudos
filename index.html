@@ -10,88 +10,94 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="pagina">
+  <div class="app">
 
-    <header class="topo">
-      <h1>Meus estudos</h1>
-      <p>Horas estudadas por tecnologia e por dia</p>
-    </header>
+    <!-- Menu lateral: marca e formulário -->
+    <aside class="menu">
+      <div class="marca">
+        <span class="logo"></span>
+        <div>
+          <strong>Meus Estudos</strong>
+          <small>Painel de desempenho</small>
+        </div>
+      </div>
 
-    <div class="painel">
+      <form id="formulario">
+        <h2>Registrar estudo</h2>
 
-      <!-- Coluna da esquerda: formulário e histórico -->
-      <aside class="lateral">
-        <form id="formulario">
-          <h2>Registrar estudo</h2>
+        <label class="campo-largo">
+          Tecnologia
+          <select id="tecnologia">
+            <option>HTML</option>
+            <option>CSS</option>
+            <option>JavaScript</option>
+            <option>Python</option>
+            <option>Node.js</option>
+            <option>Git</option>
+            <option>Outra</option>
+          </select>
+        </label>
 
-          <label class="campo-largo">
-            Tecnologia
-            <select id="tecnologia">
-              <option>HTML</option>
-              <option>CSS</option>
-              <option>JavaScript</option>
-              <option>Python</option>
-              <option>Node.js</option>
-              <option>Git</option>
-              <option>Outra</option>
-            </select>
-          </label>
+        <label>
+          Horas
+          <input type="number" id="horas" min="0.5" step="0.5" value="1" required>
+        </label>
 
-          <label>
-            Horas
-            <input type="number" id="horas" min="0.5" step="0.5" value="1" required>
-          </label>
+        <label>
+          Data
+          <input type="date" id="data" required>
+        </label>
 
-          <label>
-            Data
-            <input type="date" id="data" required>
-          </label>
+        <button type="submit" class="campo-largo">Registrar estudo</button>
+      </form>
+    </aside>
 
-          <button type="submit" class="campo-largo">Registrar estudo</button>
-        </form>
+    <!-- Centro: título, cartões e gráficos -->
+    <main class="centro">
+      <header class="topo">
+        <h1>Desempenho de Estudos</h1>
+        <p>Horas estudadas por dia e por tecnologia</p>
+      </header>
 
-        <section class="historico">
-          <h2>Histórico</h2>
-          <p id="vazio">Nenhum estudo registrado ainda. Preencha o formulário para começar.</p>
-          <ul id="lista"></ul>
-        </section>
-      </aside>
+      <section class="cartoes">
+        <div class="cartao">
+          <span class="rotulo">Total estudado</span>
+          <span class="cartao-valor"><span id="total-horas">0</span> <small>horas</small></span>
+        </div>
+        <div class="cartao">
+          <span class="rotulo">Tecnologia mais estudada</span>
+          <span class="cartao-valor" id="mais-estudada">-</span>
+        </div>
+        <div class="cartao">
+          <span class="rotulo">Sequência atual</span>
+          <span class="cartao-valor"><span id="sequencia">0</span> <small id="rotulo-sequencia">dias</small></span>
+        </div>
+      </section>
 
-      <!-- Coluna da direita: cartões e gráficos -->
-      <main class="principal">
-        <section class="cartoes">
-          <div class="cartao cartao-total">
-            <span class="cartao-valor" id="total-horas">0</span>
-            <span>horas estudadas</span>
-          </div>
-          <div class="cartao">
-            <span class="cartao-valor" id="mais-estudada">-</span>
-            <span>tecnologia mais estudada</span>
-          </div>
-          <div class="cartao">
-            <span class="cartao-valor" id="sequencia">0</span>
-            <span id="rotulo-sequencia">dias seguidos</span>
-          </div>
-        </section>
+      <section class="grafico">
+        <h2>Evolução diária</h2>
+        <div class="caixa-grafico">
+          <canvas id="grafico-dias"></canvas>
+        </div>
+      </section>
 
-        <section class="graficos">
-          <div class="grafico">
-            <h2>Horas por tecnologia</h2>
-            <div class="caixa-grafico">
-              <canvas id="grafico-tecnologias"></canvas>
-            </div>
-          </div>
+      <section class="grafico">
+        <h2>Horas por tecnologia</h2>
+        <div class="caixa-grafico">
+          <canvas id="grafico-tecnologias"></canvas>
+        </div>
+      </section>
+    </main>
 
-          <div class="grafico">
-            <h2>Horas por dia</h2>
-            <div class="caixa-grafico">
-              <canvas id="grafico-dias"></canvas>
-            </div>
-          </div>
-        </section>
-      </main>
+    <!-- Direita: histórico -->
+    <aside class="direita">
+      <section class="historico">
+        <h2>Histórico</h2>
+        <p id="vazio">Nenhum estudo registrado ainda. Preencha o formulário para começar.</p>
+        <ul id="lista"></ul>
+      </section>
+    </aside>
 
-    </div>
   </div>
 
   <!-- Chart.js (biblioteca gratuita de gráficos) precisa vir ANTES do nosso script -->
