@@ -1,0 +1,117 @@
+/* Cores do projeto (fáceis de trocar depois) */
+:root {
+  --fundo: #eef2f5;
+  --cartao: #ffffff;
+  --texto: #1d2733;
+  --destaque: #2f6fed;
+  --borda: #d5dde5;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, sans-serif;
+  background: var(--fundo);
+  color: var(--texto);
+}
+
+main {
+  max-width: 560px;
+  margin: 0 auto;
+  padding: 24px 16px;
+}
+
+.total {
+  background: var(--destaque);
+  color: white;
+  padding: 20px;
+  border-radius: 12px;
+  font-size: 1.1rem;
+  margin-bottom: 16px;
+}
+
+#total-horas {
+  font-size: 2.4rem;
+  font-weight: 700;
+}
+
+form {
+  background: var(--cartao);
+  border: 1px solid var(--borda);
+  border-radius: 12px;
+  padding: 16px;
+  display: grid;
+  gap: 12px;
+}
+
+label {
+  display: grid;
+  gap: 4px;
+  font-weight: 600;
+}
+
+select, input {
+  padding: 8px;
+  font-size: 1rem;
+  border: 1px solid var(--borda);
+  border-radius: 8px;
+}
+
+button {
+  padding: 10px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 8px;
+  background: var(--destaque);
+  color: white;
+  cursor: pointer;
+}
+
+button:focus-visible, select:focus-visible, input:focus-visible {
+  outline: 3px solid var(--texto);
+  outline-offset: 2px;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+}
+
+li {
+  background: var(--cartao);
+  border: 1px solid var(--borda);
+  border-radius: 8px;
+  padding: 10px 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+li button {
+  padding: 4px 10px;
+  background: transparent;
+  color: var(--texto);
+  border: 1px solid var(--borda);
+}
+
+.grafico {
+  background: var(--cartao);
+  border: 1px solid var(--borda);
+  border-radius: 12px;
+  padding: 16px;
+  margin-top: 16px;
+}
+
+.grafico h2 {
+  margin-top: 0;
+}
+
+.caixa-grafico {
+  position: relative;
+  height: 240px;
+}
