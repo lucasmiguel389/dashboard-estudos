@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Dashboard de Estudos</title>
+  <link rel="icon" type="image/svg+xml" href="logo.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -15,7 +16,7 @@
     <!-- Menu lateral: marca e formulário -->
     <aside class="menu">
       <div class="marca">
-        <span class="logo"></span>
+        <img class="logo" src="logo.svg" alt="" width="36" height="36">
         <div>
           <strong>Meus Estudos</strong>
           <small>Painel de desempenho</small>
@@ -95,6 +96,13 @@
         <h2>Histórico</h2>
         <p id="vazio">Nenhum estudo registrado ainda. Preencha o formulário para começar.</p>
         <ul id="lista"></ul>
+      </section>
+
+      <section class="grafico grafico-pizza">
+        <h2>Proporção por tecnologia</h2>
+        <div class="caixa-grafico">
+          <canvas id="grafico-pizza"></canvas>
+        </div>
       </section>
     </aside>
 

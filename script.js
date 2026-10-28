@@ -8,6 +8,7 @@ const totalHoras = document.getElementById("total-horas");
 const mensagemVazia = document.getElementById("vazio");
 const canvasDias = document.getElementById("grafico-dias");
 const canvasTecnologias = document.getElementById("grafico-tecnologias");
+const canvasPizza = document.getElementById("grafico-pizza");
 const cartaoMaisEstudada = document.getElementById("mais-estudada");
 const cartaoSequencia = document.getElementById("sequencia");
 const rotuloSequencia = document.getElementById("rotulo-sequencia");
@@ -15,10 +16,23 @@ const rotuloSequencia = document.getElementById("rotulo-sequencia");
 // Guardam os gráficos para podermos apagar e desenhar de novo
 let graficoDias = null;
 let graficoTecnologias = null;
+let graficoPizza = null;
 
 // Cores dos gráficos (as mesmas do style.css)
 const COR_BARRA = "#5cc8d7";
 const COR_TEXTO = "#8fa7b3";
+const COR_CONTORNO = "#000000";
+
+// Cada tecnologia tem a sua cor na pizza
+const CORES_TECNOLOGIAS = {
+  "HTML": "#f2a65a",
+  "CSS": "#9b8cf2",
+  "JavaScript": "#5cc8d7",
+  "Python": "#6fd08c",
+  "Node.js": "#f27d8c",
+  "Git": "#e6c84f",
+  "Outra": "#8fa7b3"
+};
 
 // Deixa os gráficos com a mesma fonte e cores da página
 if (typeof Chart !== "undefined") {
@@ -58,6 +72,14 @@ function somarHorasPor(campo) {
     soma[estudo[campo]] = somaAtual + estudo.horas;
   });
   return soma;
+}
+
+// Lista de [tecnologia, horas], da mais estudada para a menos estudada
+// Object.entries transforma { Python: 5 } em [["Python", 5]]
+function tecnologiasOrdenadas() {
+  return Object.entries(somarHorasPor("tecnologia")).sort(function (a, b) {
+    return b[1] - a[1];
+  });
 }
 
 // 6. Cartões: tecnologia mais estudada e sequência de dias
@@ -165,6 +187,9 @@ function mostrarGraficoDias() {
         label: "Horas",
         data: horas,
         backgroundColor: COR_BARRA,
+        borderColor: COR_CONTORNO,
+        borderWidth: 2,
+        borderSkipped: false,
         borderRadius: 4,
         maxBarThickness: 40
       }]
@@ -188,10 +213,7 @@ function mostrarGraficoTecnologias() {
     return;
   }
 
-  // Object.entries transforma { Python: 5 } em [["Python", 5]]
-  const ordenado = Object.entries(somarHorasPor("tecnologia")).sort(function (a, b) {
-    return b[1] - a[1];
-  });
+  const ordenado = tecnologiasOrdenadas();
 
   const nomes = ordenado.map(function (par) {
     return par[0];
@@ -212,6 +234,9 @@ function mostrarGraficoTecnologias() {
         label: "Horas",
         data: horas,
         backgroundColor: COR_BARRA,
+        borderColor: COR_CONTORNO,
+        borderWidth: 2,
+        borderSkipped: false,
         borderRadius: 4,
         maxBarThickness: 28
       }]
@@ -227,6 +252,67 @@ function mostrarGraficoTecnologias() {
       }
     },
     plugins: [numerosNasBarras]
+  });
+}
+
+// 10. Gráfico de pizza: proporção de horas de cada tecnologia
+function mostrarGraficoPizza() {
+  if (typeof Chart === "undefined") {
+    return;
+  }
+
+  const ordenado = tecnologiasOrdenadas();
+
+  // A legenda mostra as horas: "JavaScript: 10h"
+  const nomes = ordenado.map(function (par) {
+    return par[0] + ": " + formatarNumero(par[1]) + "h";
+  });
+  const horas = ordenado.map(function (par) {
+    return par[1];
+  });
+
+  // Pega a cor de cada tecnologia (se não tiver, usa cinza)
+  const cores = ordenado.map(function (par) {
+    return CORES_TECNOLOGIAS[par[0]] || COR_TEXTO;
+  });
+
+  if (graficoPizza) {
+    graficoPizza.destroy();
+  }
+
+  graficoPizza = new Chart(canvasPizza, {
+    type: "pie",
+    data: {
+      labels: nomes,
+      datasets: [{
+        label: "Horas",
+        data: horas,
+        backgroundColor: cores,
+        borderColor: COR_CONTORNO,
+        borderWidth: 2
+      }]
+    },
+    options: {
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          position: "bottom",
+          labels: { boxWidth: 12, padding: 12, color: "#e8f1f5" }
+        },
+        tooltip: {
+          callbacks: {
+            // Ao passar o mouse, mostra a porcentagem da fatia
+            label: function (contexto) {
+              const total = contexto.dataset.data.reduce(function (a, b) {
+                return a + b;
+              }, 0);
+              const percentual = Math.round((contexto.parsed / total) * 100);
+              return " " + percentual + "% do total";
+            }
+          }
+        }
+      }
+    }
   });
 }
 
@@ -264,7 +350,7 @@ function criarItem(estudo, posicao) {
   return item;
 }
 
-// 10. Desenhar tudo na tela
+// 11. Desenhar tudo na tela
 function mostrar() {
   lista.innerHTML = "";
   let total = 0;
@@ -285,9 +371,10 @@ function mostrar() {
   mostrarCartoes();
   mostrarGraficoDias();
   mostrarGraficoTecnologias();
+  mostrarGraficoPizza();
 }
 
-// 11. Quando clicar em "Registrar estudo"
+// 12. Quando clicar em "Registrar estudo"
 formulario.addEventListener("submit", function (evento) {
   evento.preventDefault(); // impede a página de recarregar
 
@@ -302,5 +389,5 @@ formulario.addEventListener("submit", function (evento) {
   mostrar();
 });
 
-// 12. Mostrar o que já estava salvo assim que a página abre
+// 13. Mostrar o que já estava salvo assim que a página abre
 mostrar();

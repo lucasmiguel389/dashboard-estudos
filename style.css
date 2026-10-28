@@ -66,10 +66,8 @@ h2 {
 }
 
 .logo {
-  width: 32px;
-  height: 32px;
-  border-radius: 8px;
-  background: linear-gradient(135deg, var(--ciano), var(--roxo));
+  width: 36px;
+  height: 36px;
 }
 
 .marca strong {
@@ -296,7 +294,12 @@ li button:hover {
 
   .direita {
     display: flex;
+    flex-direction: column;
     min-height: 0;
+  }
+
+  .grafico-pizza {
+    flex: 0 0 45%;
   }
 
   .historico {
